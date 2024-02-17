@@ -1,0 +1,41 @@
+services:
+
+  adminer:
+    container_name: hyper-adminer
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - hyper-network
+    environment:
+      ADMINER_DEFAULT_SERVER: hyper-postgres
+    tty: true
+    stdin_open: true
+
+  postgres:
+    container_name: hyper-postgres
+    image: postgres:15.3
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - hyper-network
+    volumes:
+      - hyper-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PW
+      POSTGRES_DB: $POSTGRES_DB
+    tty: true
+    stdin_open: true
+
+networks:
+  hyper-network:
+    driver: bridge
+    name: hyper-network
+
+
+volumes:
+  hyper-volume:
+    name: hyper-volume
